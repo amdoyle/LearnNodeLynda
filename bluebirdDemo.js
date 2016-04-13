@@ -1,0 +1,31 @@
+var fs = require('fs');
+var Promise = require("bluebird");
+
+Promise.promisifyAll(fs);
+//callback
+fs.readFile('./data5.json', 'utf-8', function(err, data){
+  if(err) {
+    console.error('unable to read file');
+  }
+  else {
+    try {
+      data = JSON.parse(data);
+      console.log(data.name);
+    }
+    catch (e) {
+      console.error("invalid jason in file");
+    }
+  }
+});
+//promises
+fs.readFileAsync('./data1.json')
+  .then(JSON.parse)
+  .then(function (val) {
+    console.log(val);
+  })
+  .catch(SyntaxError, function(e) {
+    console.error("invalid jason in file");
+  })
+  .catch(function() {
+    console.error('unable to read file');
+  })
